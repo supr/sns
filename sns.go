@@ -42,11 +42,11 @@ type Message struct {
 }
 
 type Subscription struct {
-    Endpoint string
-    Owner string
-    Protocol string
-    SubscriptionArn string
-    TopicArn string
+	Endpoint        string
+	Owner           string
+	Protocol        string
+	SubscriptionArn string
+	TopicArn        string
 }
 
 func (topic *Topic) Message(message [8192]byte, subject string) *Message {
@@ -59,9 +59,9 @@ type ResponseMetadata struct {
 }
 
 type ListTopicsResponse struct {
-	Topics []Topic `xml:"ListTopicsResult>Topics>member"`
+	Topics    []Topic `xml:"ListTopicsResult>Topics>member"`
 	NextToken string
-    ResponseMetadata
+	ResponseMetadata
 }
 
 type CreateTopicResponse struct {
@@ -74,9 +74,9 @@ type DeleteTopicResponse struct {
 }
 
 type ListSubscriptionsResponse struct {
-    Subscriptions []Subscription `xml:"ListSubscriptionsResult>Subscriptions>member"`
-    NextToken string
-    ResponseMetadata
+	Subscriptions []Subscription `xml:"ListSubscriptionsResult>Subscriptions>member"`
+	NextToken     string
+	ResponseMetadata
 }
 
 func makeParams(action string) map[string]string {
@@ -88,9 +88,9 @@ func makeParams(action string) map[string]string {
 func (sns *SNS) ListTopics(NextToken *string) (resp *ListTopicsResponse, err os.Error) {
 	resp = &ListTopicsResponse{}
 	params := makeParams("ListTopics")
-    if NextToken != nil {
-        params["NextToken"] = *NextToken
-    }
+	if NextToken != nil {
+		params["NextToken"] = *NextToken
+	}
 	err = sns.query(nil, nil, params, resp)
 	return
 }
@@ -98,7 +98,7 @@ func (sns *SNS) ListTopics(NextToken *string) (resp *ListTopicsResponse, err os.
 func (sns *SNS) CreateTopic(Name string) (resp *CreateTopicResponse, err os.Error) {
 	resp = &CreateTopicResponse{}
 	params := makeParams("CreateTopic")
-    params["Name"] = Name
+	params["Name"] = Name
 	err = sns.query(nil, nil, params, resp)
 	return
 }
@@ -116,13 +116,13 @@ func (topic *Topic) Delete() (resp *DeleteTopicResponse, err os.Error) {
 }
 
 func (sns *SNS) ListSubscriptions(NextToken *string) (resp *ListSubscriptionsResponse, err os.Error) {
-    resp = &ListSubscriptionsResponse{}
-    params := makeParams("ListSubscriptions")
-    if NextToken != nil {
-        params["NextToken"] = *NextToken
-    }
-    err = sns.query(nil, nil, params, resp)
-    return
+	resp = &ListSubscriptionsResponse{}
+	params := makeParams("ListSubscriptions")
+	if NextToken != nil {
+		params["NextToken"] = *NextToken
+	}
+	err = sns.query(nil, nil, params, resp)
+	return
 }
 
 type Error struct {
