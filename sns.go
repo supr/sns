@@ -1,3 +1,12 @@
+//
+// goamz - Go packages to interact with the Amazon Web Services.
+//
+//   https://wiki.ubuntu.com/goamz
+//
+// Copyright (c) 2011 Memeo Inc.
+//
+// Written by Prudhvi Krishna Surapaneni <me@prudhvi.net>
+//
 package sns
 
 import (
