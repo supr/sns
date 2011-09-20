@@ -27,3 +27,11 @@ var TestCreateTopicXmlOK = `
   </ResponseMetadata>
 </CreateTopicResponse>
 `
+
+var TestDeleteTopicXmlOK = `
+<DeleteTopicResponse xmlns="http://sns.amazonaws.com/doc/2010-03-31/">
+  <ResponseMetadata>
+    <RequestId>f3aa9ac9-3c3d-11df-8235-9dab105e9c32</RequestId>
+  </ResponseMetadata>
+</DeleteTopicResponse>
+`

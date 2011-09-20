@@ -47,3 +47,18 @@ func (s *S) TestCreateTopic(c *gocheck.C) {
     c.Assert(resp.ResponseMetadata.RequestId, gocheck.Equals, "a8dec8b3-33a4-11df-8963-01868b7c937a")
     c.Assert(err, gocheck.IsNil)
 }
+
+func (s *S) TestDeleteTopic(c *gocheck.C) {
+    testServer.PrepareResponse(200, nil, TestDeleteTopicXmlOK)
+
+    t := sns.Topic{nil, "arn:aws:sns:us-east-1:123456789012:My-Topic"}
+    resp, err := s.sns.DeleteTopic(t)
+    req := testServer.WaitRequest()
+
+    c.Assert(req.Method, gocheck.Equals, "GET")
+    c.Assert(req.URL.Path, gocheck.Equals, "/")
+    c.Assert(req.Header["Date"], gocheck.Not(gocheck.Equals), "")
+
+    c.Assert(resp.ResponseMetadata.RequestId, gocheck.Equals, "f3aa9ac9-3c3d-11df-8235-9dab105e9c32")
+    c.Assert(err, gocheck.IsNil)
+}
