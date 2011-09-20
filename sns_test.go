@@ -62,3 +62,22 @@ func (s *S) TestDeleteTopic(c *gocheck.C) {
     c.Assert(resp.ResponseMetadata.RequestId, gocheck.Equals, "f3aa9ac9-3c3d-11df-8235-9dab105e9c32")
     c.Assert(err, gocheck.IsNil)
 }
+
+func (s *S) TestListSubscriptions(c *gocheck.C) {
+    testServer.PrepareResponse(200, nil, TestListSubscriptionsXmlOK)
+
+    resp, err := s.sns.ListSubscriptions(nil)
+    req := testServer.WaitRequest()
+
+    c.Assert(req.Method, gocheck.Equals, "GET")
+    c.Assert(req.URL.Path, gocheck.Equals, "/")
+    c.Assert(req.Header["Date"], gocheck.Not(gocheck.Equals), "")
+
+    c.Assert(len(resp.Subscriptions), gocheck.Not(gocheck.Equals), 0)
+    c.Assert(resp.Subscriptions[0].Protocol, gocheck.Equals, "email")
+    c.Assert(resp.Subscriptions[0].Endpoint, gocheck.Equals, "example@amazon.com")
+    c.Assert(resp.Subscriptions[0].SubscriptionArn, gocheck.Equals, "arn:aws:sns:us-east-1:123456789012:My-Topic:80289ba6-0fd4-4079-afb4-ce8c8260f0ca")
+    c.Assert(resp.Subscriptions[0].TopicArn, gocheck.Equals, "arn:aws:sns:us-east-1:698519295917:My-Topic")
+    c.Assert(resp.Subscriptions[0].Owner, gocheck.Equals, "123456789012")
+    c.Assert(err, gocheck.IsNil)
+}
