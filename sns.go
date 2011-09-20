@@ -65,7 +65,7 @@ type ListTopicsResponse struct {
 }
 
 type CreateTopicResponse struct {
-	Topic Topic `xml:"CreateTopicResult"`
+	Topic Topic `xml:"CreateTopicResult>"`
 	ResponseMetadata
 }
 
