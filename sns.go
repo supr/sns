@@ -215,6 +215,20 @@ func (sns *SNS) Subscribe(Endpoint, Protocol, TopicArn string) (resp *SubscribeR
 	return
 }
 
+type UnsubscribeResponse struct {
+	ResponseMetadata
+}
+
+func (sns *SNS) Unsubscribe(SubscriptionArn string) (resp *UnsubscribeResponse, err os.Error) {
+	resp = &UnsubscribeResponse{}
+	params := makeParams("Unsubscribe")
+
+	params["SubscriptionArn"] = SubscriptionArn
+
+	err = sns.query(nil, nil, params, resp)
+	return
+}
+
 type Error struct {
 	StatusCode int
 	Code       string

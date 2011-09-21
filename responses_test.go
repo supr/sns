@@ -108,3 +108,11 @@ var TestSubscribeXmlOK = `
   </ResponseMetadata>
 </SubscribeResponse>
 `
+
+var TestUnsubscribeXmlOK = `
+<UnsubscribeResponse xmlns="http://sns.amazonaws.com/doc/2010-03-31/">
+  <ResponseMetadata>
+    <RequestId>18e0ac39-3776-11df-84c0-b93cc1666b84</RequestId>
+  </ResponseMetadata>
+</UnsubscribeResponse>
+`
