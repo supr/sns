@@ -199,20 +199,20 @@ func (sns *SNS) SetTopicAttributes(AttributeName, AttributeValue, TopicArn strin
 }
 
 type SubscribeResponse struct {
-    SubscriptionArn string `xml:"SubscribeResult>SubscriptionArn"`
-    ResponseMetadata
+	SubscriptionArn string `xml:"SubscribeResult>SubscriptionArn"`
+	ResponseMetadata
 }
 
 func (sns *SNS) Subscribe(Endpoint, Protocol, TopicArn string) (resp *SubscribeResponse, err os.Error) {
-   resp = &SubscribeResponse{}
-   params := makeParams("Subscribe")
+	resp = &SubscribeResponse{}
+	params := makeParams("Subscribe")
 
-   params["Endpoint"] = Endpoint
-   params["Protocol"] = Protocol
-   params["TopicArn"] = TopicArn
+	params["Endpoint"] = Endpoint
+	params["Protocol"] = Protocol
+	params["TopicArn"] = TopicArn
 
-   err = sns.query(nil, nil, params, resp)
-   return
+	err = sns.query(nil, nil, params, resp)
+	return
 }
 
 type Error struct {
