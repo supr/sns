@@ -178,6 +178,26 @@ func (sns *SNS) Publish(options *PublishOpt) (resp *PublishResponse, err os.Erro
 	return
 }
 
+type SetTopicAttributesResponse struct {
+	ResponseMetadata
+}
+
+func (sns *SNS) SetTopicAttributes(AttributeName, AttributeValue, TopicArn string) (resp *SetTopicAttributesResponse, err os.Error) {
+	resp = &SetTopicAttributesResponse{}
+	params := makeParams("SetTopicAttributes")
+
+	if AttributeName == "" || TopicArn == "" {
+		return nil, os.NewError("Invalid Attribute Name or TopicArn")
+	}
+
+	params["AttributeName"] = AttributeName
+	params["AttributeValue"] = AttributeValue
+	params["TopicArn"] = TopicArn
+
+	err = sns.query(nil, nil, params, resp)
+	return
+}
+
 type Error struct {
 	StatusCode int
 	Code       string

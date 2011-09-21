@@ -89,3 +89,11 @@ var TestPublishXmlOK = `
   </ResponseMetadata>
 </PublishResponse>
 `
+
+var TestSetTopicAttributesXmlOK = `
+<SetTopicAttributesResponse xmlns="http://sns.amazonaws.com/doc/2010-03-31/">
+  <ResponseMetadata>
+    <RequestId>a8763b99-33a7-11df-a9b7-05d48da6f042</RequestId>
+  </ResponseMetadata>
+</SetTopicAttributesResponse>
+`
