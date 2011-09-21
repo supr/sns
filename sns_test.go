@@ -159,3 +159,19 @@ func (s *S) TestUnsubscribe(c *gocheck.C) {
     c.Assert(resp.ResponseMetadata.RequestId, gocheck.Equals, "18e0ac39-3776-11df-84c0-b93cc1666b84")
     c.Assert(err, gocheck.IsNil)
 }
+
+func (s *S) TestConfirmSubscription(c *gocheck.C) {
+    testServer.PrepareResponse(200, nil, TestConfirmSubscriptionXmlOK)
+
+    opt := &sns.ConfirmSubscriptionOpts{"", "51b2ff3edb475b7d91550e0ab6edf0c1de2a34e6ebaf6", "arn:aws:sns:us-east-1:123456789012:My-Topic"}
+    resp, err := s.sns.ConfirmSubscription(opt)
+    req := testServer.WaitRequest()
+
+    c.Assert(req.Method, gocheck.Equals, "GET")
+    c.Assert(req.URL.Path, gocheck.Equals, "/")
+    c.Assert(req.Header["Date"], gocheck.Not(gocheck.Equals), "")
+
+    c.Assert(resp.SubscriptionArn, gocheck.Equals, "arn:aws:sns:us-east-1:123456789012:My-Topic:80289ba6-0fd4-4079-afb4-ce8c8260f0ca")
+    c.Assert(resp.ResponseMetadata.RequestId, gocheck.Equals, "7a50221f-3774-11df-a9b7-05d48da6f042")
+    c.Assert(err, gocheck.IsNil)
+}

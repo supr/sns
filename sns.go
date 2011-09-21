@@ -229,6 +229,32 @@ func (sns *SNS) Unsubscribe(SubscriptionArn string) (resp *UnsubscribeResponse, 
 	return
 }
 
+type ConfirmSubscriptionResponse struct {
+	SubscriptionArn string `xml:"ConfirmSubscriptionResult>SubscriptionArn"`
+	ResponseMetadata
+}
+
+type ConfirmSubscriptionOpts struct {
+	AuthenticateOnUnsubscribe string
+	Token                     string
+	TopicArn                  string
+}
+
+func (sns *SNS) ConfirmSubscription(options *ConfirmSubscriptionOpts) (resp *ConfirmSubscriptionResponse, err os.Error) {
+	resp = &ConfirmSubscriptionResponse{}
+	params := makeParams("ConfirmSubscription")
+
+	if options.AuthenticateOnUnsubscribe != "" {
+		params["AuthenticateOnUnsubscribe"] = options.AuthenticateOnUnsubscribe
+	}
+
+	params["Token"] = options.Token
+	params["TopicArn"] = options.TopicArn
+
+	err = sns.query(nil, nil, params, resp)
+	return
+}
+
 type Error struct {
 	StatusCode int
 	Code       string
