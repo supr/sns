@@ -79,6 +79,15 @@ type ListSubscriptionsResponse struct {
 	ResponseMetadata
 }
 
+type AttributeEntry struct {
+    Key, Value string
+}
+
+type GetTopicAttributesResponse struct {
+    Attributes []AttributeEntry `xml:"GetTopicAttributesResult>Attributes>entry"`
+    ResponseMetadata
+}
+
 func makeParams(action string) map[string]string {
 	params := make(map[string]string)
 	params["Action"] = action
@@ -123,6 +132,14 @@ func (sns *SNS) ListSubscriptions(NextToken *string) (resp *ListSubscriptionsRes
 	}
 	err = sns.query(nil, nil, params, resp)
 	return
+}
+
+func (sns *SNS) GetTopicAttributes(TopicArn string) (resp *GetTopicAttributesResponse, err os.Error) {
+    resp = &GetTopicAttributesResponse{}
+    params := makeParams("GetTopicAttributes")
+    params["TopicArn"] = TopicArn
+    err = sns.query(nil, nil, params, resp)
+    return
 }
 
 type Error struct {
