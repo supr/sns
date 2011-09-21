@@ -208,3 +208,23 @@ func (s *S) TestRemovePermission(c *gocheck.C) {
     c.Assert(resp.RequestId, gocheck.Equals, "d170b150-33a8-11df-995a-2d6fbe836cc1")
     c.Assert(err, gocheck.IsNil)
 }
+
+func (s *S) TestListSubscriptionByTopic(c *gocheck.C) {
+    testServer.PrepareResponse(200, nil, TestListSubscriptionsByTopicXmlOK)
+
+    opt := &sns.ListSubscriptionByTopicOpt{"", "arn:aws:sns:us-east-1:123456789012:My-Topic"}
+    resp, err := s.sns.ListSubscriptionByTopic(opt)
+    req := testServer.WaitRequest()
+
+    c.Assert(req.Method, gocheck.Equals, "GET")
+    c.Assert(req.URL.Path, gocheck.Equals, "/")
+    c.Assert(req.Header["Date"], gocheck.Not(gocheck.Equals), "")
+
+    c.Assert(len(resp.Subscriptions), gocheck.Not(gocheck.Equals), 0)
+    c.Assert(resp.Subscriptions[0].TopicArn, gocheck.Equals, "arn:aws:sns:us-east-1:123456789012:My-Topic")
+    c.Assert(resp.Subscriptions[0].SubscriptionArn, gocheck.Equals, "arn:aws:sns:us-east-1:123456789012:My-Topic:80289ba6-0fd4-4079-afb4-ce8c8260f0ca")
+    c.Assert(resp.Subscriptions[0].Owner, gocheck.Equals, "123456789012")
+    c.Assert(resp.Subscriptions[0].Endpoint, gocheck.Equals, "example@amazon.com")
+    c.Assert(resp.Subscriptions[0].Protocol, gocheck.Equals, "email")
+    c.Assert(err, gocheck.IsNil)
+}

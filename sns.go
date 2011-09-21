@@ -296,6 +296,30 @@ func (sns *SNS) RemovePermission(Label, TopicArn string) (resp *RemovePermission
 	return
 }
 
+type ListSubscriptionByTopicResponse struct {
+	Subscriptions []Subscription `xml:"ListSubscriptionsByTopicResult>Subscriptions>member"`
+	ResponseMetadata
+}
+
+type ListSubscriptionByTopicOpt struct {
+	NextToken string
+	TopicArn  string
+}
+
+func (sns *SNS) ListSubscriptionByTopic(options *ListSubscriptionByTopicOpt) (resp *ListSubscriptionByTopicResponse, err os.Error) {
+	resp = &ListSubscriptionByTopicResponse{}
+	params := makeParams("ListSbubscriptionByTopic")
+
+	if options.NextToken != "" {
+		params["NextToken"] = options.NextToken
+	}
+
+	params["TopicArn"] = options.TopicArn
+
+	err = sns.query(nil, nil, params, resp)
+	return
+}
+
 type Error struct {
 	StatusCode int
 	Code       string
