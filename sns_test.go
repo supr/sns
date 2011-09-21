@@ -100,3 +100,19 @@ func (s *S) TestGetTopicAttributes(c *gocheck.C) {
     c.Assert(resp.ResponseMetadata.RequestId, gocheck.Equals, "057f074c-33a7-11df-9540-99d0768312d3")
     c.Assert(err, gocheck.IsNil)
 }
+
+func (s *S) TestPublish(c *gocheck.C) {
+    testServer.PrepareResponse(200, nil, TestPublishXmlOK)
+
+    pubOpt := &sns.PublishOpt{"foobar","","subject","arn:aws:sns:us-east-1:123456789012:My-Topic"}
+    resp, err := s.sns.Publish(pubOpt)
+    req := testServer.WaitRequest()
+
+    c.Assert(req.Method, gocheck.Equals, "GET")
+    c.Assert(req.URL.Path, gocheck.Equals, "/")
+    c.Assert(req.Header["Date"], gocheck.Not(gocheck.Equals), "")
+
+    c.Assert(resp.MessageId, gocheck.Equals, "94f20ce6-13c5-43a0-9a9e-ca52d816e90b")
+    c.Assert(resp.ResponseMetadata.RequestId, gocheck.Equals, "f187a3c1-376f-11df-8963-01868b7c937a")
+    c.Assert(err, gocheck.IsNil)
+}

@@ -80,12 +80,12 @@ type ListSubscriptionsResponse struct {
 }
 
 type AttributeEntry struct {
-    Key, Value string
+	Key, Value string
 }
 
 type GetTopicAttributesResponse struct {
-    Attributes []AttributeEntry `xml:"GetTopicAttributesResult>Attributes>entry"`
-    ResponseMetadata
+	Attributes []AttributeEntry `xml:"GetTopicAttributesResult>Attributes>entry"`
+	ResponseMetadata
 }
 
 func makeParams(action string) map[string]string {
@@ -135,11 +135,47 @@ func (sns *SNS) ListSubscriptions(NextToken *string) (resp *ListSubscriptionsRes
 }
 
 func (sns *SNS) GetTopicAttributes(TopicArn string) (resp *GetTopicAttributesResponse, err os.Error) {
-    resp = &GetTopicAttributesResponse{}
-    params := makeParams("GetTopicAttributes")
-    params["TopicArn"] = TopicArn
-    err = sns.query(nil, nil, params, resp)
-    return
+	resp = &GetTopicAttributesResponse{}
+	params := makeParams("GetTopicAttributes")
+	params["TopicArn"] = TopicArn
+	err = sns.query(nil, nil, params, resp)
+	return
+}
+
+type PublishOpt struct {
+	Message          string
+	MessageStructure string
+	Subject          string
+	TopicArn         string
+}
+
+type PublishResponse struct {
+	MessageId string `xml:"PublishResult>MessageId"`
+	ResponseMetadata
+}
+
+func (sns *SNS) Publish(options *PublishOpt) (resp *PublishResponse, err os.Error) {
+	resp = &PublishResponse{}
+	params := makeParams("Publish")
+
+	if options.Subject != "" {
+		params["Subject"] = options.Subject
+	}
+
+	if options.MessageStructure != "" {
+		params["MessageStructure"] = options.MessageStructure
+	}
+
+	if options.Message != "" {
+		params["Message"] = options.Message
+	}
+
+	if options.TopicArn != "" {
+		params["TopicArn"] = options.TopicArn
+	}
+
+	err = sns.query(nil, nil, params, resp)
+	return
 }
 
 type Error struct {
