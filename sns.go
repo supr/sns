@@ -16,6 +16,7 @@ import (
 	"time"
 	"url"
 	"xml"
+	"strconv"
 )
 
 // The SNS type encapsulates operation with an SNS region.
@@ -250,6 +251,31 @@ func (sns *SNS) ConfirmSubscription(options *ConfirmSubscriptionOpts) (resp *Con
 
 	params["Token"] = options.Token
 	params["TopicArn"] = options.TopicArn
+
+	err = sns.query(nil, nil, params, resp)
+	return
+}
+
+type Permission struct {
+	ActionName string
+	AccountId  string
+}
+
+type AddPermissionResponse struct {
+	ResponseMetadata
+}
+
+func (sns *SNS) AddPermission(permissions []Permission, Label, TopicArn string) (resp *AddPermissionResponse, err os.Error) {
+	resp = &AddPermissionResponse{}
+	params := makeParams("AddPermission")
+
+	for i, p := range permissions {
+		params["AWSAccountId.member."+strconv.Itoa(i+1)] = p.AccountId
+		params["ActionName.member."+strconv.Itoa(i+1)] = p.ActionName
+	}
+
+	params["Label"] = Label
+	params["TopicArn"] = TopicArn
 
 	err = sns.query(nil, nil, params, resp)
 	return
