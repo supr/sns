@@ -265,7 +265,7 @@ type ConfirmSubscriptionResponse struct {
 	ResponseMetadata
 }
 
-type ConfirmSubscriptionOpts struct {
+type ConfirmSubscriptionOpt struct {
 	AuthenticateOnUnsubscribe string
 	Token                     string
 	TopicArn                  string
@@ -274,7 +274,7 @@ type ConfirmSubscriptionOpts struct {
 // ConfirmSubscription
 //
 // See http://goo.gl/3hXzH for more details.
-func (sns *SNS) ConfirmSubscription(options *ConfirmSubscriptionOpts) (resp *ConfirmSubscriptionResponse, err os.Error) {
+func (sns *SNS) ConfirmSubscription(options *ConfirmSubscriptionOpt) (resp *ConfirmSubscriptionResponse, err os.Error) {
 	resp = &ConfirmSubscriptionResponse{}
 	params := makeParams("ConfirmSubscription")
 
