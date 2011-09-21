@@ -194,3 +194,17 @@ func (s *S) TestAddPermission(c *gocheck.C) {
     c.Assert(resp.RequestId, gocheck.Equals, "6a213e4e-33a8-11df-9540-99d0768312d3")
     c.Assert(err, gocheck.IsNil)
 }
+
+func (s *S) TestRemovePermission(c *gocheck.C) {
+    testServer.PrepareResponse(200, nil, TestRemovePermissionXmlOK)
+
+    resp, err := s.sns.RemovePermission("NewPermission", "arn:aws:sns:us-east-1:123456789012:My-Topic")
+    req := testServer.WaitRequest()
+
+    c.Assert(req.Method, gocheck.Equals, "GET")
+    c.Assert(req.URL.Path, gocheck.Equals, "/")
+    c.Assert(req.Header["Date"], gocheck.Not(gocheck.Equals), "")
+
+    c.Assert(resp.RequestId, gocheck.Equals, "d170b150-33a8-11df-995a-2d6fbe836cc1")
+    c.Assert(err, gocheck.IsNil)
+}

@@ -135,3 +135,11 @@ var TestAddPermissionXmlOK = `
   </ResponseMetadata>
 </AddPermissionResponse>
 `
+
+var TestRemovePermissionXmlOK = `
+<RemovePermissionResponse xmlns="http://sns.amazonaws.com/doc/2010-03-31/">
+  <ResponseMetadata>
+    <RequestId>d170b150-33a8-11df-995a-2d6fbe836cc1</RequestId>
+  </ResponseMetadata>
+</RemovePermissionResponse>
+`

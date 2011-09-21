@@ -281,6 +281,21 @@ func (sns *SNS) AddPermission(permissions []Permission, Label, TopicArn string) 
 	return
 }
 
+type RemovePermissionResponse struct {
+	ResponseMetadata
+}
+
+func (sns *SNS) RemovePermission(Label, TopicArn string) (resp *RemovePermissionResponse, err os.Error) {
+	resp = &RemovePermissionResponse{}
+	params := makeParams("RemovePermission")
+
+	params["Label"] = Label
+	params["TopicArn"] = TopicArn
+
+	err = sns.query(nil, nil, params, resp)
+	return
+}
+
 type Error struct {
 	StatusCode int
 	Code       string
