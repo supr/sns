@@ -198,6 +198,23 @@ func (sns *SNS) SetTopicAttributes(AttributeName, AttributeValue, TopicArn strin
 	return
 }
 
+type SubscribeResponse struct {
+    SubscriptionArn string `xml:"SubscribeResult>SubscriptionArn"`
+    ResponseMetadata
+}
+
+func (sns *SNS) Subscribe(Endpoint, Protocol, TopicArn string) (resp *SubscribeResponse, err os.Error) {
+   resp = &SubscribeResponse{}
+   params := makeParams("Subscribe")
+
+   params["Endpoint"] = Endpoint
+   params["Protocol"] = Protocol
+   params["TopicArn"] = TopicArn
+
+   err = sns.query(nil, nil, params, resp)
+   return
+}
+
 type Error struct {
 	StatusCode int
 	Code       string

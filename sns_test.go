@@ -130,3 +130,18 @@ func (s *S) TestSetTopicAttributes(c *gocheck.C) {
     c.Assert(resp.ResponseMetadata.RequestId, gocheck.Equals, "a8763b99-33a7-11df-a9b7-05d48da6f042")
     c.Assert(err, gocheck.IsNil)
 }
+
+func (s *S) TestSubscribe(c *gocheck.C) {
+    testServer.PrepareResponse(200, nil, TestSubscribeXmlOK)
+
+    resp, err := s.sns.Subscribe("example@amazon.com", "email", "arn:aws:sns:us-east-1:123456789012:My-Topic")
+    req := testServer.WaitRequest()
+
+    c.Assert(req.Method, gocheck.Equals, "GET")
+    c.Assert(req.URL.Path, gocheck.Equals, "/")
+    c.Assert(req.Header["Date"], gocheck.Not(gocheck.Equals), "")
+
+    c.Assert(resp.SubscriptionArn, gocheck.Equals, "pending confirmation")
+    c.Assert(resp.ResponseMetadata.RequestId, gocheck.Equals, "a169c740-3766-11df-8963-01868b7c937a")
+    c.Assert(err, gocheck.IsNil)
+}
