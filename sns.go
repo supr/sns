@@ -95,6 +95,9 @@ func makeParams(action string) map[string]string {
 	return params
 }
 
+// ListTopics
+//
+// See http://goo.gl/lfrMK for more details.
 func (sns *SNS) ListTopics(NextToken *string) (resp *ListTopicsResponse, err os.Error) {
 	resp = &ListTopicsResponse{}
 	params := makeParams("ListTopics")
@@ -105,6 +108,9 @@ func (sns *SNS) ListTopics(NextToken *string) (resp *ListTopicsResponse, err os.
 	return
 }
 
+// CreateTopic
+//
+// See http://goo.gl/m9aAt for more details.
 func (sns *SNS) CreateTopic(Name string) (resp *CreateTopicResponse, err os.Error) {
 	resp = &CreateTopicResponse{}
 	params := makeParams("CreateTopic")
@@ -113,6 +119,9 @@ func (sns *SNS) CreateTopic(Name string) (resp *CreateTopicResponse, err os.Erro
 	return
 }
 
+// DeleteTopic
+//
+// See http://goo.gl/OXNcY for more details.
 func (sns *SNS) DeleteTopic(topic Topic) (resp *DeleteTopicResponse, err os.Error) {
 	resp = &DeleteTopicResponse{}
 	params := makeParams("DeleteTopic")
@@ -121,10 +130,16 @@ func (sns *SNS) DeleteTopic(topic Topic) (resp *DeleteTopicResponse, err os.Erro
 	return
 }
 
+// Delete
+//
+// Helper function for deleting a topic
 func (topic *Topic) Delete() (resp *DeleteTopicResponse, err os.Error) {
 	return topic.SNS.DeleteTopic(*topic)
 }
 
+// ListSubscriptions
+//
+// See http://goo.gl/k3aGn for more details.
 func (sns *SNS) ListSubscriptions(NextToken *string) (resp *ListSubscriptionsResponse, err os.Error) {
 	resp = &ListSubscriptionsResponse{}
 	params := makeParams("ListSubscriptions")
@@ -135,6 +150,9 @@ func (sns *SNS) ListSubscriptions(NextToken *string) (resp *ListSubscriptionsRes
 	return
 }
 
+// GetTopicAttributes
+//
+// See http://goo.gl/WXRoX for more details.
 func (sns *SNS) GetTopicAttributes(TopicArn string) (resp *GetTopicAttributesResponse, err os.Error) {
 	resp = &GetTopicAttributesResponse{}
 	params := makeParams("GetTopicAttributes")
@@ -155,6 +173,9 @@ type PublishResponse struct {
 	ResponseMetadata
 }
 
+// Publish
+//
+// See http://goo.gl/AY2D8 for more details.
 func (sns *SNS) Publish(options *PublishOpt) (resp *PublishResponse, err os.Error) {
 	resp = &PublishResponse{}
 	params := makeParams("Publish")
@@ -183,6 +204,9 @@ type SetTopicAttributesResponse struct {
 	ResponseMetadata
 }
 
+// SetTopicAttributes
+//
+// See http://goo.gl/oVYW7 for more details.
 func (sns *SNS) SetTopicAttributes(AttributeName, AttributeValue, TopicArn string) (resp *SetTopicAttributesResponse, err os.Error) {
 	resp = &SetTopicAttributesResponse{}
 	params := makeParams("SetTopicAttributes")
@@ -204,6 +228,9 @@ type SubscribeResponse struct {
 	ResponseMetadata
 }
 
+// Subscribe
+//
+// See http://goo.gl/c3iGS for more details.
 func (sns *SNS) Subscribe(Endpoint, Protocol, TopicArn string) (resp *SubscribeResponse, err os.Error) {
 	resp = &SubscribeResponse{}
 	params := makeParams("Subscribe")
@@ -220,6 +247,9 @@ type UnsubscribeResponse struct {
 	ResponseMetadata
 }
 
+// Unsubscribe
+//
+// See http://goo.gl/4l5Ge for more details.
 func (sns *SNS) Unsubscribe(SubscriptionArn string) (resp *UnsubscribeResponse, err os.Error) {
 	resp = &UnsubscribeResponse{}
 	params := makeParams("Unsubscribe")
@@ -241,6 +271,9 @@ type ConfirmSubscriptionOpts struct {
 	TopicArn                  string
 }
 
+// ConfirmSubscription
+//
+// See http://goo.gl/3hXzH for more details.
 func (sns *SNS) ConfirmSubscription(options *ConfirmSubscriptionOpts) (resp *ConfirmSubscriptionResponse, err os.Error) {
 	resp = &ConfirmSubscriptionResponse{}
 	params := makeParams("ConfirmSubscription")
@@ -265,6 +298,9 @@ type AddPermissionResponse struct {
 	ResponseMetadata
 }
 
+// AddPermission
+//
+// See http://goo.gl/mbY4a for more details.
 func (sns *SNS) AddPermission(permissions []Permission, Label, TopicArn string) (resp *AddPermissionResponse, err os.Error) {
 	resp = &AddPermissionResponse{}
 	params := makeParams("AddPermission")
@@ -285,6 +321,9 @@ type RemovePermissionResponse struct {
 	ResponseMetadata
 }
 
+// RemovePermission
+//
+// See http://goo.gl/wGl5j for more details.
 func (sns *SNS) RemovePermission(Label, TopicArn string) (resp *RemovePermissionResponse, err os.Error) {
 	resp = &RemovePermissionResponse{}
 	params := makeParams("RemovePermission")
@@ -306,6 +345,9 @@ type ListSubscriptionByTopicOpt struct {
 	TopicArn  string
 }
 
+// ListSubscriptionByTopic
+//
+// See http://goo.gl/LaVcC for more details.
 func (sns *SNS) ListSubscriptionByTopic(options *ListSubscriptionByTopicOpt) (resp *ListSubscriptionByTopicResponse, err os.Error) {
 	resp = &ListSubscriptionByTopicResponse{}
 	params := makeParams("ListSbubscriptionByTopic")
