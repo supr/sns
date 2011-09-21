@@ -81,3 +81,22 @@ func (s *S) TestListSubscriptions(c *gocheck.C) {
     c.Assert(resp.Subscriptions[0].Owner, gocheck.Equals, "123456789012")
     c.Assert(err, gocheck.IsNil)
 }
+
+func (s *S) TestGetTopicAttributes(c *gocheck.C) {
+    testServer.PrepareResponse(200, nil, TestGetTopicAttributesXmlOK)
+
+    resp, err := s.sns.GetTopicAttributes("arn:aws:sns:us-east-1:123456789012:My-Topic")
+    req := testServer.WaitRequest()
+
+    c.Assert(req.Method, gocheck.Equals, "GET")
+    c.Assert(req.URL.Path, gocheck.Equals, "/")
+    c.Assert(req.Header["Date"], gocheck.Not(gocheck.Equals), "")
+
+    c.Assert(len(resp.Attributes), gocheck.Not(gocheck.Equals), 0)
+    c.Assert(resp.Attributes[0].Key, gocheck.Equals, "Owner")
+    c.Assert(resp.Attributes[0].Value, gocheck.Equals, "123456789012")
+    c.Assert(resp.Attributes[1].Key, gocheck.Equals, "Policy")
+    c.Assert(resp.Attributes[1].Value, gocheck.Equals, `{"Version":"2008-10-17","Id":"us-east-1/698519295917/test__default_policy_ID","Statement" : [{"Effect":"Allow","Sid":"us-east-1/698519295917/test__default_statement_ID","Principal" : {"AWS": "*"},"Action":["SNS:GetTopicAttributes","SNS:SetTopicAttributes","SNS:AddPermission","SNS:RemovePermission","SNS:DeleteTopic","SNS:Subscribe","SNS:ListSubscriptionsByTopic","SNS:Publish","SNS:Receive"],"Resource":"arn:aws:sns:us-east-1:698519295917:test","Condition" : {"StringLike" : {"AWS:SourceArn": "arn:aws:*:*:698519295917:*"}}}]}`)
+    c.Assert(resp.ResponseMetadata.RequestId, gocheck.Equals, "057f074c-33a7-11df-9540-99d0768312d3")
+    c.Assert(err, gocheck.IsNil)
+}
