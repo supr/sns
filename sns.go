@@ -38,7 +38,7 @@ func New(auth aws.Auth, region aws.Region) *SNS {
 type Message struct {
 	*SNS
 	*Topic
-	Message [8192]byte
+	Message []byte
 	Subject string
 }
 
@@ -50,7 +50,7 @@ type Subscription struct {
 	TopicArn        string
 }
 
-func (topic *Topic) Message(message [8192]byte, subject string) *Message {
+func (topic *Topic) Message(message []byte, subject string) *Message {
 	return &Message{topic.SNS, topic, message, subject}
 }
 
@@ -161,13 +161,6 @@ func (sns *SNS) GetTopicAttributes(TopicArn string) (resp *GetTopicAttributesRes
 	return
 }
 
-type PublishOpt struct {
-	Message          string
-	MessageStructure string
-	Subject          string
-	TopicArn         string
-}
-
 type PublishResponse struct {
 	MessageId string `xml:"PublishResult>MessageId"`
 	ResponseMetadata
@@ -176,24 +169,29 @@ type PublishResponse struct {
 // Publish
 //
 // See http://goo.gl/AY2D8 for more details.
-func (sns *SNS) Publish(options *PublishOpt) (resp *PublishResponse, err os.Error) {
+func (sns *SNS) Publish(message []byte, topic string) (resp *PublishResponse, err os.Error) {
+	resp, err = sns.PublishStructure(message, topic, "", "")
+	return
+}
+
+func (sns *SNS) PublishSubject(message []byte, topic, subject string) (resp *PublishResponse, err os.Error) {
+	resp, err = sns.PublishStructure(message, topic, subject, "")
+	return
+}
+
+func (sns *SNS) PublishStructure(message []byte, topic, subject, structure string) (resp *PublishResponse, err os.Error) {
 	resp = &PublishResponse{}
 	params := makeParams("Publish")
 
-	if options.Subject != "" {
-		params["Subject"] = options.Subject
+	params["Message"] = string(message)
+	params["TopicArn"] = topic
+
+	if subject != "" {
+		params["Subject"] = subject
 	}
 
-	if options.MessageStructure != "" {
-		params["MessageStructure"] = options.MessageStructure
-	}
-
-	if options.Message != "" {
-		params["Message"] = options.Message
-	}
-
-	if options.TopicArn != "" {
-		params["TopicArn"] = options.TopicArn
+	if structure != "" {
+		params["MessageStructure"] = structure
 	}
 
 	err = sns.query(nil, nil, params, resp)

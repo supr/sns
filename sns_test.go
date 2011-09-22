@@ -104,8 +104,7 @@ func (s *S) TestGetTopicAttributes(c *gocheck.C) {
 func (s *S) TestPublish(c *gocheck.C) {
     testServer.PrepareResponse(200, nil, TestPublishXmlOK)
 
-    pubOpt := &sns.PublishOpt{"foobar","","subject","arn:aws:sns:us-east-1:123456789012:My-Topic"}
-    resp, err := s.sns.Publish(pubOpt)
+    resp, err := s.sns.Publish([]byte("message"), "arn:aws:sns:us-east-1:123456789012:My-Topic")
     req := testServer.WaitRequest()
 
     c.Assert(req.Method, gocheck.Equals, "GET")
